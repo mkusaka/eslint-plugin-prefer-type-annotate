@@ -14,7 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint",
+    "lint": "eslint",
     "prepare": "tsdx build"
   },
   "peerDependencies": {},
@@ -33,9 +33,17 @@
   "author": "mkusaka",
   "module": "dist/eslint-plugin-prefer-type-annotate.esm.js",
   "devDependencies": {
+    "@types/eslint": "^6.8.1",
+    "@types/estree": "^0.0.44",
+    "@typescript-eslint/eslint-plugin": "^3.0.2",
+    "@typescript-eslint/experimental-utils": "^3.0.2",
+    "eslint": "^7.1.0",
     "husky": "^4.2.5",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.3"
+  },
+  "prettier": {
+    "singleQuote": false
   }
 }
