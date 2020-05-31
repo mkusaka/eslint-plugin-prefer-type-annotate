@@ -30,11 +30,10 @@ export const preferTypeAnnotation = createRule({
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
-    function report(location: TSESTree.Node, name?: string): void {
+    function report(location: TSESTree.Node): void {
       context.report({
         node: location,
         messageId: "preferTypeAnnotate",
-        data: { name },
       });
     }
     const checker = program.getTypeChecker();
@@ -103,7 +102,9 @@ export const preferTypeAnnotation = createRule({
         const paramsnodeTypes = paramstsNode.map(e => checker.getTypeAtLocation(e))
         console.log("objType: ", paramsnodeTypes)
         console.log("isTypeAnyType: ", paramsnodeTypes.map(e => isTypeAnyType(e)))
-        report(node)
+        for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
+          report(anyParamNode)
+        }
       },
       // [AST_NODE_TYPES.ArrayPattern](node: TSESTree.LiteralExpression): void {
       //   console.log("node: ", node)

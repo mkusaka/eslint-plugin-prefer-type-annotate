@@ -24,11 +24,10 @@ exports.preferTypeAnnotation = createRule({
     defaultOptions: [],
     create: function (context) {
         var _a = experimental_utils_1.ESLintUtils.getParserServices(context), program = _a.program, esTreeNodeToTSNodeMap = _a.esTreeNodeToTSNodeMap;
-        function report(location, name) {
+        function report(location) {
             context.report({
                 node: location,
-                messageId: "preferTypeAnnotate",
-                data: { name: name }
+                messageId: "preferTypeAnnotate"
             });
         }
         var checker = program.getTypeChecker();
@@ -87,7 +86,10 @@ exports.preferTypeAnnotation = createRule({
                 var paramsnodeTypes = paramstsNode.map(function (e) { return checker.getTypeAtLocation(e); });
                 console.log("objType: ", paramsnodeTypes);
                 console.log("isTypeAnyType: ", paramsnodeTypes.map(function (e) { return isTypeAnyType(e); }));
-                report(node);
+                for (var _i = 0, _a = node.params.filter(function (e) { return isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))); }); _i < _a.length; _i++) {
+                    var anyParamNode = _a[_i];
+                    report(anyParamNode);
+                }
             }
         };
     }
