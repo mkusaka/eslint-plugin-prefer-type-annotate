@@ -47,6 +47,32 @@ exports.preferTypeAnnotation = createRule({
         function isTypeAnyType(type) {
             return isTypeFlagSet(type, ts.TypeFlags.Any);
         }
+        // function checkParameters(params: TSESTree.Parameter[]): void {
+        //   for (const param of params) {
+        //     let annotationNode: TSESTree.Node | undefined;
+        //     switch (param.type) {
+        //       case AST_NODE_TYPES.AssignmentPattern:
+        //         annotationNode = param.left;
+        //         break;
+        //       case AST_NODE_TYPES.TSParameterProperty:
+        //         annotationNode = param.parameter;
+        //         // Check TS parameter property with default value like `constructor(private param: string = 'something') {}`
+        //         if (
+        //           annotationNode &&
+        //           annotationNode.type === AST_NODE_TYPES.AssignmentPattern
+        //         ) {
+        //           annotationNode = annotationNode.left;
+        //         }
+        //         break;
+        //       default:
+        //         annotationNode = param;
+        //         break;
+        //     }
+        //     if (annotationNode !== undefined && !annotationNode.typeAnnotation) {
+        //       // report(param, getNodeName(param));
+        //     }
+        //   }
+        // }
         // const sourceCode = context.getSourceCode();
         // const printer = (n: TSESTree.Node) => sourceCode.getText(n);
         // const filePath = context.getFilename();
@@ -57,6 +83,10 @@ exports.preferTypeAnnotation = createRule({
                 var nodeType = checker.getTypeAtLocation(tsNode);
                 console.log("objType: ", nodeType);
                 console.log("isTypeAnyType: ", isTypeAnyType(nodeType));
+                var paramstsNode = node.params.map(function (e) { return esTreeNodeToTSNodeMap.get(e); });
+                var paramsnodeTypes = paramstsNode.map(function (e) { return checker.getTypeAtLocation(e); });
+                console.log("objType: ", paramsnodeTypes);
+                console.log("isTypeAnyType: ", paramsnodeTypes.map(function (e) { return isTypeAnyType(e); }));
                 report(node);
             }
         };

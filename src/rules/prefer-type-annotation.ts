@@ -1,7 +1,7 @@
 import {
   ESLintUtils,
   TSESTree,
-  AST_NODE_TYPES
+  // AST_NODE_TYPES
 } from "@typescript-eslint/experimental-utils";
 import {
   unionTypeParts
@@ -57,36 +57,36 @@ export const preferTypeAnnotation = createRule({
       return isTypeFlagSet(type, ts.TypeFlags.Any)
     }
 
-    function checkParameters(params: TSESTree.Parameter[]): void {
-      for (const param of params) {
-        let annotationNode: TSESTree.Node | undefined;
+    // function checkParameters(params: TSESTree.Parameter[]): void {
+    //   for (const param of params) {
+    //     let annotationNode: TSESTree.Node | undefined;
 
-        switch (param.type) {
-          case AST_NODE_TYPES.AssignmentPattern:
-            annotationNode = param.left;
-            break;
-          case AST_NODE_TYPES.TSParameterProperty:
-            annotationNode = param.parameter;
+    //     switch (param.type) {
+    //       case AST_NODE_TYPES.AssignmentPattern:
+    //         annotationNode = param.left;
+    //         break;
+    //       case AST_NODE_TYPES.TSParameterProperty:
+    //         annotationNode = param.parameter;
 
-            // Check TS parameter property with default value like `constructor(private param: string = 'something') {}`
-            if (
-              annotationNode &&
-              annotationNode.type === AST_NODE_TYPES.AssignmentPattern
-            ) {
-              annotationNode = annotationNode.left;
-            }
+    //         // Check TS parameter property with default value like `constructor(private param: string = 'something') {}`
+    //         if (
+    //           annotationNode &&
+    //           annotationNode.type === AST_NODE_TYPES.AssignmentPattern
+    //         ) {
+    //           annotationNode = annotationNode.left;
+    //         }
 
-            break;
-          default:
-            annotationNode = param;
-            break;
-        }
+    //         break;
+    //       default:
+    //         annotationNode = param;
+    //         break;
+    //     }
 
-        if (annotationNode !== undefined && !annotationNode.typeAnnotation) {
-          // report(param, getNodeName(param));
-        }
-      }
-    }
+    //     if (annotationNode !== undefined && !annotationNode.typeAnnotation) {
+    //       // report(param, getNodeName(param));
+    //     }
+    //   }
+    // }
 
     // const sourceCode = context.getSourceCode();
     // const printer = (n: TSESTree.Node) => sourceCode.getText(n);
