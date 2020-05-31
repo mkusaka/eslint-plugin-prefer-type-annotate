@@ -1,0 +1,1 @@
+{"version":3,"file":"no-literal.js","sourceRoot":"","sources":["../../src/rules/no-literal.ts"],"names":[],"mappings":";;;AAEa,QAAA,aAAa,GAAoB;IAC5C,MAAM,EAAE,UAAC,OAAO;QACd,OAAO;YACL,OAAO,EAAE,UAAC,IAAI;gBACZ,OAAO,CAAC,MAAM,CAAC;oBACb,OAAO,EAAE,IAAI;oBACb,IAAI,MAAA;iBACL,CAAC,CAAC;YACL,CAAC;SACF,CAAC;IACJ,CAAC;CACF,CAAC"}

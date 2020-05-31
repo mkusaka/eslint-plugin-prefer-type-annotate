@@ -28,9 +28,9 @@ export const preferTypeAnnotation = createRule({
     );
     const checker = program.getTypeChecker();
 
-    const sourceCode = context.getSourceCode();
-    const printer = (n: TSESTree.Node) => sourceCode.getText(n);
-    const filePath = context.getFilename();
+    // const sourceCode = context.getSourceCode();
+    // const printer = (n: TSESTree.Node) => sourceCode.getText(n);
+    // const filePath = context.getFilename();
 
     return {
       [AST_NODE_TYPES.CallExpression](node: TSESTree.CallExpression): void {
