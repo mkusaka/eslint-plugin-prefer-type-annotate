@@ -1,6 +1,6 @@
 import { noLiteralRule } from "./rules/no-literal";
 
-export default {
+export = {
   rules: {
     "no-literal": noLiteralRule,
   },

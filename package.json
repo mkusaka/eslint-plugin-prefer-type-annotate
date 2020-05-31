@@ -11,39 +11,43 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
+    "start": "tsc --watch src",
+    "build": "rm -rf dist && tsc -p .",
+    "test": "jest",
     "lint": "eslint",
-    "prepare": "tsdx build"
+    "prepare": "yarn build"
   },
   "peerDependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "lint-staged --verbose"
     }
+  },
+  "lint-staged": {
+    "*.ts": "lint"
   },
   "prettier": {
     "printWidth": 80,
     "semi": true,
-    "singleQuote": true,
+    "singleQuote": false,
     "trailingComma": "es5"
   },
   "name": "@mkusaka/eslint-plugin-prefer-type-annotate",
   "author": "mkusaka",
-  "module": "dist/eslint-plugin-prefer-type-annotate.esm.js",
   "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
     "@types/eslint": "^6.8.1",
     "@types/estree": "^0.0.44",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/experimental-utils": "^3.0.2",
+    "babel-jest": "^26.0.1",
     "eslint": "^7.1.0",
     "husky": "^4.2.5",
-    "tsdx": "^0.13.2",
+    "jest": "^26.0.1",
+    "lint-staged": "^10.2.7",
     "tslib": "^2.0.0",
     "typescript": "^3.9.3"
-  },
-  "prettier": {
-    "singleQuote": false
   }
 }

@@ -1,12 +1,10 @@
 {
   "include": [
     "src",
-    "types"
   ],
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "lib": [
-      "dom",
       "esnext"
     ],
     "importHelpers": true,
@@ -26,7 +24,7 @@
         "node_modules/*"
       ]
     },
-    "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "outDir": "dist"
   }
 }
