@@ -1,13 +1,12 @@
 import {
   ESLintUtils,
   TSESTree,
-  ASTUtils,
   AST_NODE_TYPES
 } from "@typescript-eslint/experimental-utils";
 
 const createRule = ESLintUtils.RuleCreator((ruleName) => ruleName);
 
-export default createRule({
+export const preferTypeAnnotation = createRule({
   name: "prefer-type-annotate",
   meta: {
     type: "suggestion",
