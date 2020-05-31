@@ -106,6 +106,13 @@ export const preferTypeAnnotation = createRule({
           report(anyParamNode)
         }
       },
+      ReturnStatement(node): void {
+        const tsNode = esTreeNodeToTSNodeMap.get(node)
+        const nodeType = checker.getTypeAtLocation(tsNode)
+        if (isTypeAnyType(nodeType)) {
+          report(node)
+        }
+      }
       // [AST_NODE_TYPES.ArrayPattern](node: TSESTree.LiteralExpression): void {
       //   console.log("node: ", node)
       //   const objTsNode = esTreeNodeToTSNodeMap.get(obj);

@@ -90,7 +90,41 @@ exports.preferTypeAnnotation = createRule({
                     var anyParamNode = _a[_i];
                     report(anyParamNode);
                 }
+            },
+            ReturnStatement: function (node) {
+                var tsNode = esTreeNodeToTSNodeMap.get(node);
+                var nodeType = checker.getTypeAtLocation(tsNode);
+                if (isTypeAnyType(nodeType)) {
+                    report(node);
+                }
             }
+            // [AST_NODE_TYPES.ArrayPattern](node: TSESTree.LiteralExpression): void {
+            //   console.log("node: ", node)
+            //   const objTsNode = esTreeNodeToTSNodeMap.get(obj);
+            //   const objType = checker.getTypeAtLocation(objTsNode);
+            //   console.log("checker to string", checker.typeToString(objType))
+            //   if (
+            //     node.callee.type === AST_NODE_TYPES.MemberExpression &&
+            //     node.callee.property.type === AST_NODE_TYPES.Identifier
+            //   ) {
+            //     const obj = node.callee.object;
+            //     const prop = node.callee.property;
+            //     const objTsNode = esTreeNodeToTSNodeMap.get(obj);
+            //     const objType = checker.getTypeAtLocation(objTsNode);
+            //     console.log(checker.typeToString(objType))
+            //     if (checker.typeToString(objType) === "") {
+            //       if (["next", "prev", "parseInt"].includes(prop.name)) {
+            //         context.report({
+            //           node,
+            //           messageId: "preferTypeAnnotate",
+            //           data: {
+            //             method: prop.name,
+            //           },
+            //         });
+            //       }
+            //     }
+            //   }
+            // },
         };
     }
 });
