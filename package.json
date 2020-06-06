@@ -64,7 +64,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@typescript-eslint/experimental-utils": "^3.0.2",
-    "tsutils": "^3.17.1"
+    "@typescript-eslint/experimental-utils": "^3.0.2"
   }
 }

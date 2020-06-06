@@ -3,7 +3,6 @@ import {
   TSESTree,
   // AST_NODE_TYPES
 } from "@typescript-eslint/experimental-utils";
-import { unionTypeParts } from "tsutils";
 import ts from "typescript";
 
 const createRule = ESLintUtils.RuleCreator((ruleName) => ruleName);
@@ -20,27 +19,27 @@ export const preferTypeAnnotation = createRule({
     },
     messages: {
       ArrowFunctionExpression:
-        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type.",
       FunctionExpression:
-        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type.",
       FunctionDeclaration:
-        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type.",
       ArrayPattern:
-        "Please annotate this array with the correct one. This array is inferred as any type",
+        "Please annotate this array with the correct one. This array is inferred as any type.",
       ClassProperty:
-        "Please annotate this property with the correct one. This property is inferred as any type",
+        "Please annotate this property with the correct one. This property is inferred as any type.",
       TSIndexSignature:
-        "Please annotate this signature with the correct one. This signature is inferred as any type",
+        "Please annotate this signature with the correct one. This signature is inferred as any type.",
       ObjectPattern:
-        "Please annotate this object with the correct one. This object is inferred as any type",
+        "Please annotate this object with the correct one. This object is inferred as any type.",
       TSPropertySignature:
-        "Please annotate this property signature with the correct one. This property signature is inferred as any type",
+        "Please annotate this property signature with the correct one. This property signature is inferred as any type.",
       VariableDeclarator:
-        "Please annotate this variable with the correct one. This variable is inferred as any type",
+        "Please annotate this variable with the correct one. This variable is inferred as any type.",
       VariableDeclaratorObject:
-        "Please annotate this variable with the correct one. This variable is inferred as any type",
+        "Please annotate this variable with the correct one. This variable is inferred as any type.",
       VariableDeclaratorArray:
-        "Please annotate this variable with the correct one. This variable is inferred as any type",
+        "Please annotate this variable with the correct one. This variable is inferred as any type.",
     },
     schema: [],
   },
@@ -71,22 +70,8 @@ export const preferTypeAnnotation = createRule({
     }
     const checker = program.getTypeChecker();
 
-    function getTypeFlags(type: ts.Type) {
-      let flags: ts.TypeFlags = 0;
-      for (const t of unionTypeParts(type)) {
-        flags |= t.flags;
-      }
-      return flags;
-    }
-
-    function isTypeFlagSet(type: ts.Type, flagsToCheck: ts.TypeFlags) {
-      const flags = getTypeFlags(type);
-
-      return (flags & flagsToCheck) !== 0;
-    }
-
-    function isTypeAnyType(type: ts.Type) {
-      return isTypeFlagSet(type, ts.TypeFlags.Any);
+    function isTypeAnyType({ flags }: ts.Type) {
+      return flags === ts.TypeFlags.Any;
     }
 
     return {
