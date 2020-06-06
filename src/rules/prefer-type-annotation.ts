@@ -40,6 +40,8 @@ export const preferTypeAnnotation = createRule({
         "Please annotate this variable with the correct one. This variable is inferred as any type.",
       VariableDeclaratorArray:
         "Please annotate this variable with the correct one. This variable is inferred as any type.",
+      AsWithAnyKeyword:
+        "Please annotate this as assert with the correct one. This as assert is inferred as any type.",
     },
     schema: [],
   },
@@ -62,6 +64,7 @@ export const preferTypeAnnotation = createRule({
         | "VariableDeclarator"
         | "VariableDeclaratorArray"
         | "VariableDeclaratorObject"
+        | "AsWithAnyKeyword"
     ): void {
       context.report({
         node: location,
@@ -203,6 +206,11 @@ export const preferTypeAnnotation = createRule({
             }
             break;
           }
+        }
+      },
+      TSAsExpression(node): void {
+        if (node.typeAnnotation.type === "TSAnyKeyword") {
+          report(node, "AsWithAnyKeyword");
         }
       },
     };
