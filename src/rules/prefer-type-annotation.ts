@@ -81,18 +81,38 @@ export const preferTypeAnnotation = createRule({
     }
 
     return {
+      /**
+       *
+       * const foo = (e) => e;
+       * //           ^~~ detect this any pattern
+       * @param node
+       */
       ArrowFunctionExpression(node): void {
         // TODO: detect return type any,,,,,
         for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
           report(anyParamNode, "ArrowFunctionExpression")
         }
       },
+      /**
+       *
+       * class Foo {
+       *   constructor(a) {}
+       *   //          ^~~ detect this any pattern
+       * }
+       * @param node
+       */
       FunctionExpression(node): void {
         // TODO: detect return type any,,,,,
         for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
           report(anyParamNode, "FunctionExpression")
         }
       },
+      /**
+       *
+       * function foo(e) {return e};
+       * //           ^~~ detect this any pattern
+       * @param node
+       */
       FunctionDeclaration(node): void {
         // TODO: detect return type any,,,,,
         for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
@@ -113,6 +133,14 @@ export const preferTypeAnnotation = createRule({
           report(node, "ClassProperty")
         }
       },
+      /**
+       *
+       * interface {
+       *   [key: string]: any;
+       *   //             ^~~ detect this any pattern
+       * }
+       * @param node
+       */
       TSIndexSignature(node): void {
         // because of `An index signature must have a type annotation.ts(1021)` error from tsc, we don't need check type by checker
         if (node.typeAnnotation?.typeAnnotation.type === "TSAnyKeyword") {
@@ -126,6 +154,16 @@ export const preferTypeAnnotation = createRule({
           report(node, "ObjectPattern")
         }
       },
+      /**
+       *
+       * interface {
+       *   key: any;
+       *   //   ^~~ detect this any pattern
+       *   value;
+       *   //   ^~~ also detect this any pattern
+       * }
+       * @param node
+       */
       TSPropertySignature(node): void {
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const declareType = checker.getTypeAtLocation(esnode);
