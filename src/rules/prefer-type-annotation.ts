@@ -19,17 +19,28 @@ export const preferTypeAnnotation = createRule({
       requiresTypeChecking: true,
     },
     messages: {
-      ArrowFunctionExpression: "ArrowFunctionExpression",
-      FunctionExpression: "FunctionExpression",
-      FunctionDeclaration: "FunctionDeclaration",
-      ArrayPattern: "ArrayPattern",
-      ClassProperty: "ClassProperty",
-      TSIndexSignature: "TSIndexSignature",
-      ObjectPattern: "ObjectPattern",
-      TSPropertySignature: "TSPropertySignature",
-      VariableDeclarator: "VariableDeclarator",
-      VariableDeclaratorObject: "VariableDeclaratorObject",
-      VariableDeclaratorArray: "VariableDeclaratorArray",
+      ArrowFunctionExpression:
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+      FunctionExpression:
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+      FunctionDeclaration:
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
+      ArrayPattern:
+        "Please annotate this array with the correct one. This array is inferred as any type",
+      ClassProperty:
+        "Please annotate this property with the correct one. This property is inferred as any type",
+      TSIndexSignature:
+        "Please annotate this signature with the correct one. This signature is inferred as any type",
+      ObjectPattern:
+        "Please annotate this object with the correct one. This object is inferred as any type",
+      TSPropertySignature:
+        "Please annotate this property signature with the correct one. This property signature is inferred as any type",
+      VariableDeclarator:
+        "Please annotate this variable with the correct one. This variable is inferred as any type",
+      VariableDeclaratorObject:
+        "Please annotate this variable with the correct one. This variable is inferred as any type",
+      VariableDeclaratorArray:
+        "Please annotate this variable with the correct one. This variable is inferred as any type",
     },
     schema: [],
   },
