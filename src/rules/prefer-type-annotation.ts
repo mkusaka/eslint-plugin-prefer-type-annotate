@@ -29,7 +29,9 @@ export const preferTypeAnnotation = createRule({
       TSIndexSignature: "TSIndexSignature",
       ObjectPattern: "ObjectPattern",
       TSPropertySignature: "TSPropertySignature",
-      VariableDeclarator: "VariableDeclarator"
+      VariableDeclarator: "VariableDeclarator",
+      VariableDeclaratorObject: "VariableDeclaratorObject",
+      VariableDeclaratorArray: "VariableDeclaratorArray"
     },
     schema: []
   },
@@ -38,7 +40,21 @@ export const preferTypeAnnotation = createRule({
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
-    function report(location: TSESTree.Node, message: "ArrowFunctionExpression" | "FunctionExpression" | "FunctionDeclaration" | "ArrayPattern" | "ClassProperty" | "TSIndexSignature" | "ObjectPattern" | "TSPropertySignature" | "VariableDeclarator"): void {
+    function report(
+      location: TSESTree.Node,
+      message:
+        | "ArrowFunctionExpression"
+        | "FunctionExpression"
+        | "FunctionDeclaration"
+        | "ArrayPattern"
+        | "ClassProperty"
+        | "TSIndexSignature"
+        | "ObjectPattern"
+        | "TSPropertySignature"
+        | "VariableDeclarator"
+        | "VariableDeclaratorArray"
+        | "VariableDeclaratorObject"
+    ): void {
       context.report({
         node: location,
         messageId: message,
@@ -98,10 +114,9 @@ export const preferTypeAnnotation = createRule({
         }
       },
       TSIndexSignature(node): void {
-        const esnode = esTreeNodeToTSNodeMap.get(node);
-        const declareType = checker.getTypeAtLocation(esnode);
-        if (isTypeAnyType(declareType)) {
-          report(node, "TSIndexSignature")
+        // because of `An index signature must have a type annotation.ts(1021)` error from tsc, we don't need check type by checker
+        if (node.typeAnnotation?.typeAnnotation.type === "TSAnyKeyword") {
+            report(node, "TSIndexSignature");
         }
       },
       ObjectPattern(node): void {
@@ -119,10 +134,37 @@ export const preferTypeAnnotation = createRule({
         }
       },
       VariableDeclarator(node): void {
-        const esnode = esTreeNodeToTSNodeMap.get(node);
-        const declareType = checker.getTypeAtLocation(esnode);
-        if (isTypeAnyType(declareType)) {
-          report(node, "VariableDeclarator")
+        switch (node.id.type) {
+          // const { foo, bar, baz } = obj;
+          case "ObjectPattern":
+            node.id.properties.forEach((e) => {
+              const declareType = checker.getTypeAtLocation(
+                esTreeNodeToTSNodeMap.get(e)
+              );
+              if (isTypeAnyType(declareType)) {
+                report(e, "VariableDeclaratorObject");
+              }
+            });
+            break;
+          // const [ foo, bar, baz ] = arr;
+          case "ArrayPattern":
+            node.id.elements.filter(Boolean).forEach((e) => {
+              const declareType = checker.getTypeAtLocation(
+                esTreeNodeToTSNodeMap.get(e!)
+              );
+              if (isTypeAnyType(declareType)) {
+                report(e!, "VariableDeclaratorArray");
+              }
+            });
+            break;
+          default: {
+            const esnode = esTreeNodeToTSNodeMap.get(node);
+            const declareType = checker.getTypeAtLocation(esnode);
+            if (isTypeAnyType(declareType)) {
+              report(node, "VariableDeclarator");
+            }
+            break;
+          }
         }
       }
     };

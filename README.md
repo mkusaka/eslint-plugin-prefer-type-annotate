@@ -14,11 +14,11 @@ npm install --save-dev @mkusaka/eslint-plugin-prefer-type-annotate
 yarn add -D @mkusaka/eslint-plugin-prefer-type-annotate
 ```
 
-## Motibation
+## Motivation
 
 For cases when the noInplicitAny CompileOption off ts environment, function or variable declaration are sometime infer to `any` type.
 
-Since `any` type is very dangirous (it brake TypeScript typesystem..), most of TypeScript developer want to enable `noImplicitAny` compiler option.
+Since `any` type is very dangerous (it brake TypeScript typesystem..), most of TypeScript developer want to enable `noImplicitAny` compiler option.
 
 So, some project, like gradually converting from js to ts all project files, must annotate implicit any `before` noImplicitAny to true.
 
@@ -49,3 +49,6 @@ function e(f: number, g: number) {
   return f / g
 }
 ```
+
+## TODO
+This rule not yet covered function return type is any or not.
