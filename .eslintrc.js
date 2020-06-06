@@ -24,6 +24,7 @@ module.exports = {
   plugins: ["@typescript-eslint", "prettier"],
   rules: {
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/restrict-template-expressions": "off"
   },
 };

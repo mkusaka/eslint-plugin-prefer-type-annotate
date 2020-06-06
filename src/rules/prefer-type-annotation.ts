@@ -102,6 +102,8 @@ export const preferTypeAnnotation = createRule({
       );
       console.log(`ErrorMessage: ${message}`);
     });
+
+    context.getSourceCode();
     function report(
       location: TSESTree.Node,
       message:
@@ -124,6 +126,19 @@ export const preferTypeAnnotation = createRule({
         messageId: message,
       });
     }
+    const starts = allDiagnostics.filter((e) => {
+      return e && e.file && e.start;
+    });
+    const startExpressions = starts.reduce<{ [key: string]: string }>(
+      (prev, next) => {
+        const message = ts.flattenDiagnosticMessageText(next.messageText, "\n");
+        return {
+          ...prev,
+          [`${next.start},${next.start + next.length}`]: message,
+        };
+      },
+      {}
+    );
     const checker = program.getTypeChecker();
 
     function isTypeAnyType({ flags }: ts.Type) {
@@ -131,6 +146,16 @@ export const preferTypeAnnotation = createRule({
     }
 
     return {
+      "*": function (node) {
+        // @ts-ignore
+        console.dir(node.range);
+        // @ts-ignore
+        if (startExpressions[`${node.range[0]},${node.range[1]}`]) {
+          // @ts-ignore
+          report(node, startExpressions[`${node.range[0]},${node.range[1]}`] as any);
+        }
+        // report()
+      },
       /**
        *
        * const foo = (e) => e;
