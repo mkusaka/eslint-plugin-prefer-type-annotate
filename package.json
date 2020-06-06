@@ -2,7 +2,6 @@
   "version": "0.0.2",
   "license": "MIT",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src"
@@ -53,6 +52,14 @@
     "tslib": "^2.0.0",
     "typescript": "^3.9.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkusaka/eslint-plugin-prefer-type-annotate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mkusaka/eslint-plugin-prefer-type-annotate/issues"
+  },
+  "homepage": "https://github.com/mkusaka/eslint-plugin-prefer-type-annotate",
   "publishConfig": {
     "access": "public"
   },
