@@ -152,7 +152,12 @@ export const preferTypeAnnotation = createRule({
         // @ts-ignore
         if (startExpressions[`${node.range[0]},${node.range[1]}`]) {
           // @ts-ignore
-          report(node, startExpressions[`${node.range[0]},${node.range[1]}`] as any);
+          // astの関係でずれることがある
+          // ので、多分startをfallback先にすると良い
+          report(
+            node,
+            startExpressions[`${node.range[0]},${node.range[1]}`] as any
+          );
         }
         // report()
       },
