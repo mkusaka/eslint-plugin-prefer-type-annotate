@@ -3,10 +3,8 @@ import {
   TSESTree,
   // AST_NODE_TYPES
 } from "@typescript-eslint/experimental-utils";
-import {
-  unionTypeParts
-} from "tsutils"
-import ts from 'typescript';
+import { unionTypeParts } from "tsutils";
+import ts from "typescript";
 
 const createRule = ESLintUtils.RuleCreator((ruleName) => ruleName);
 
@@ -18,7 +16,7 @@ export const preferTypeAnnotation = createRule({
       description: "",
       category: "Best Practices",
       recommended: false,
-      requiresTypeChecking: true
+      requiresTypeChecking: true,
     },
     messages: {
       ArrowFunctionExpression: "ArrowFunctionExpression",
@@ -31,9 +29,9 @@ export const preferTypeAnnotation = createRule({
       TSPropertySignature: "TSPropertySignature",
       VariableDeclarator: "VariableDeclarator",
       VariableDeclaratorObject: "VariableDeclaratorObject",
-      VariableDeclaratorArray: "VariableDeclaratorArray"
+      VariableDeclaratorArray: "VariableDeclaratorArray",
     },
-    schema: []
+    schema: [],
   },
   defaultOptions: [],
   create(context) {
@@ -77,7 +75,7 @@ export const preferTypeAnnotation = createRule({
     }
 
     function isTypeAnyType(type: ts.Type) {
-      return isTypeFlagSet(type, ts.TypeFlags.Any)
+      return isTypeFlagSet(type, ts.TypeFlags.Any);
     }
 
     return {
@@ -89,8 +87,10 @@ export const preferTypeAnnotation = createRule({
        */
       ArrowFunctionExpression(node): void {
         // TODO: detect return type any,,,,,
-        for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
-          report(anyParamNode, "ArrowFunctionExpression")
+        for (const anyParamNode of node.params.filter((e) =>
+          isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
+        )) {
+          report(anyParamNode, "ArrowFunctionExpression");
         }
       },
       /**
@@ -103,8 +103,10 @@ export const preferTypeAnnotation = createRule({
        */
       FunctionExpression(node): void {
         // TODO: detect return type any,,,,,
-        for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
-          report(anyParamNode, "FunctionExpression")
+        for (const anyParamNode of node.params.filter((e) =>
+          isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
+        )) {
+          report(anyParamNode, "FunctionExpression");
         }
       },
       /**
@@ -115,22 +117,24 @@ export const preferTypeAnnotation = createRule({
        */
       FunctionDeclaration(node): void {
         // TODO: detect return type any,,,,,
-        for (const anyParamNode of node.params.filter(e => isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e))))) {
-          report(anyParamNode, "FunctionDeclaration")
+        for (const anyParamNode of node.params.filter((e) =>
+          isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
+        )) {
+          report(anyParamNode, "FunctionDeclaration");
         }
       },
       ArrayPattern(node): void {
         const esnode = esTreeNodeToTSNodeMap.get(node);
-        const arrType = checker.getTypeAtLocation(esnode)
+        const arrType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(arrType)) {
-          report(node, "ArrayPattern")
+          report(node, "ArrayPattern");
         }
       },
       ClassProperty(node): void {
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const properityType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(properityType)) {
-          report(node, "ClassProperty")
+          report(node, "ClassProperty");
         }
       },
       /**
@@ -144,14 +148,14 @@ export const preferTypeAnnotation = createRule({
       TSIndexSignature(node): void {
         // because of `An index signature must have a type annotation.ts(1021)` error from tsc, we don't need check type by checker
         if (node.typeAnnotation?.typeAnnotation.type === "TSAnyKeyword") {
-            report(node, "TSIndexSignature");
+          report(node, "TSIndexSignature");
         }
       },
       ObjectPattern(node): void {
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const declareType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(declareType)) {
-          report(node, "ObjectPattern")
+          report(node, "ObjectPattern");
         }
       },
       /**
@@ -168,7 +172,7 @@ export const preferTypeAnnotation = createRule({
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const declareType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(declareType)) {
-          report(node, "TSPropertySignature")
+          report(node, "TSPropertySignature");
         }
       },
       VariableDeclarator(node): void {
@@ -204,7 +208,7 @@ export const preferTypeAnnotation = createRule({
             break;
           }
         }
-      }
+      },
     };
   },
-})
+});
