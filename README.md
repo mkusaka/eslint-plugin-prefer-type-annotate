@@ -16,11 +16,13 @@ yarn add -D @mkusaka/eslint-plugin-prefer-type-annotate
 
 ## Motivation
 
-For cases when the noInplicitAny CompileOption off ts environment, function or variable declaration are sometime infer to `any` type.
+In cases when the noInplicitAny CompileOption off ts environment, function or variable declaration are sometime inferred to `any` type.
 
 Since `any` type is very dangerous (it brake TypeScript typesystem..), most of TypeScript developer want to enable `noImplicitAny` compiler option.
 
 So, some project, like gradually converting from js to ts all project files, must annotate implicit any `before` noImplicitAny to true.
+
+But, implicit any detection are sometime too difficult.
 
 To detect no implicit any and destroy it gradually, eslint is best solution of that. But, there is no good rule for this problem. (typedef rule can't detect inferred type information.)
 
