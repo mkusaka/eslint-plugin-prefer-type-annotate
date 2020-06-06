@@ -52,6 +52,33 @@ export const preferTypeAnnotation = createRule({
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
+    const allDiagnostics = ts.getPreEmitDiagnostics(
+      program,
+      program.getSourceFile(context.getFilename())
+    );
+    allDiagnostics.forEach((diagnostic) => {
+      if (!diagnostic) {
+        return;
+      }
+
+      if (!diagnostic.file || !diagnostic.start) {
+        return;
+      }
+
+      const position = diagnostic.file.getLineAndCharacterOfPosition(
+        diagnostic.start
+      );
+      // エラーを検出した位置
+      const line = position.line + 1;
+      const character = position.character + 1;
+      console.log(diagnostic.file.fileName);
+      console.log(`ErrorPosition: ${line}, ${character}`); // 検出したエラー内容
+      const message = ts.flattenDiagnosticMessageText(
+        diagnostic.messageText,
+        "\n"
+      );
+      console.log(`ErrorMessage: ${message}`);
+    });
     function report(
       location: TSESTree.Node,
       message:
@@ -163,6 +190,13 @@ export const preferTypeAnnotation = createRule({
           report(node, "ClassProperty");
         }
       },
+      ObjectPattern(node): void {
+        const esnode = esTreeNodeToTSNodeMap.get(node);
+        const declareType = checker.getTypeAtLocation(esnode);
+        if (isTypeAnyType(declareType)) {
+          report(node, "ObjectPattern");
+        }
+      },
       /**
        *
        * interface {
@@ -175,13 +209,6 @@ export const preferTypeAnnotation = createRule({
         // because of `An index signature must have a type annotation.ts(1021)` error from tsc, we don't need check type by checker
         if (node.typeAnnotation?.typeAnnotation.type === "TSAnyKeyword") {
           report(node, "TSIndexSignature");
-        }
-      },
-      ObjectPattern(node): void {
-        const esnode = esTreeNodeToTSNodeMap.get(node);
-        const declareType = checker.getTypeAtLocation(esnode);
-        if (isTypeAnyType(declareType)) {
-          report(node, "ObjectPattern");
         }
       },
       /**
