@@ -56,7 +56,30 @@ export const preferTypeAnnotation = createRule({
       program,
       program.getSourceFile(context.getFilename())
     );
-    allDiagnostics.forEach((diagnostic) => {
+    program.getSyntacticDiagnostics().forEach((diagnostic) => {
+      if (!diagnostic) {
+        return;
+      }
+
+      if (!diagnostic.file || !diagnostic.start) {
+        return;
+      }
+
+      const position = diagnostic.file.getLineAndCharacterOfPosition(
+        diagnostic.start
+      );
+      // エラーを検出した位置
+      const line = position.line + 1;
+      const character = position.character + 1;
+      console.log(diagnostic.file.fileName);
+      console.log(`ErrorPosition: ${line}, ${character}`); // 検出したエラー内容
+      const message = ts.flattenDiagnosticMessageText(
+        diagnostic.messageText,
+        "\n"
+      );
+      console.log(`ErrorMessage: ${message}`);
+    });
+    allDiagnostics.forEach((diagnostic: ts.Diagnostic) => {
       if (!diagnostic) {
         return;
       }
