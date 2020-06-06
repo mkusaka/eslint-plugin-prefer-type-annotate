@@ -42,6 +42,8 @@ export const preferTypeAnnotation = createRule({
         "Please annotate this variable with the correct one. This variable is inferred as any type.",
       AsWithAnyKeyword:
         "Please annotate this as assert with the correct one. This as assert is inferred as any type.",
+      AnyReturnType:
+        "Please annotate this function return type with the correct one. This function return type is inferred as any type.",
     },
     schema: [],
   },
@@ -65,6 +67,7 @@ export const preferTypeAnnotation = createRule({
         | "VariableDeclaratorArray"
         | "VariableDeclaratorObject"
         | "AsWithAnyKeyword"
+        | "AnyReturnType"
     ): void {
       context.report({
         node: location,
@@ -85,7 +88,15 @@ export const preferTypeAnnotation = createRule({
        * @param node
        */
       ArrowFunctionExpression(node): void {
-        // TODO: detect return type any,,,,,
+        const signatures = checker
+          .getTypeAtLocation(esTreeNodeToTSNodeMap.get(node))
+          .getCallSignatures();
+        if (signatures.length) {
+          const returnType = checker.getReturnTypeOfSignature(signatures[0]);
+          if (isTypeAnyType(returnType)) {
+            report(node, "AnyReturnType");
+          }
+        }
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
@@ -101,7 +112,15 @@ export const preferTypeAnnotation = createRule({
        * @param node
        */
       FunctionExpression(node): void {
-        // TODO: detect return type any,,,,,
+        const signatures = checker
+          .getTypeAtLocation(esTreeNodeToTSNodeMap.get(node))
+          .getCallSignatures();
+        if (signatures.length) {
+          const returnType = checker.getReturnTypeOfSignature(signatures[0]);
+          if (isTypeAnyType(returnType)) {
+            report(node, "AnyReturnType");
+          }
+        }
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
@@ -115,7 +134,15 @@ export const preferTypeAnnotation = createRule({
        * @param node
        */
       FunctionDeclaration(node): void {
-        // TODO: detect return type any,,,,,
+        const signatures = checker
+          .getTypeAtLocation(esTreeNodeToTSNodeMap.get(node))
+          .getCallSignatures();
+        if (signatures.length) {
+          const returnType = checker.getReturnTypeOfSignature(signatures[0]);
+          if (isTypeAnyType(returnType)) {
+            report(node, "AnyReturnType");
+          }
+        }
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
