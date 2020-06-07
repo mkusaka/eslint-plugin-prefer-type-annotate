@@ -14,6 +14,31 @@ npm install --save-dev @mkusaka/eslint-plugin-prefer-type-annotate
 yarn add -D @mkusaka/eslint-plugin-prefer-type-annotate
 ```
 
+## config
+.eslintrc.js
+```js
+module.exports = {
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: "module",
+    project: "tsconfig.json", // these rules require type infomation
+  },
+  extends: [
+    // "plugin:@mkusaka/prefer-type-annotation/all-error-rules", // include all rule as error
+    "plugin:@mkusaka/prefer-type-annotation/all-warn-rules", // include all rule as error
+  ],
+  plugins: [
+    "@mkusaka/prefer-type-annotate",
+  ],
+  rules: {
+    // you can also manually enable specific rule and disable it.
+    // "@mkusaka/prefer-type-annotate/arrow-function-expression": "off"
+  },
+};
+```
+
+
 ## Motivation
 
 In cases when the noInplicitAny CompileOption off ts environment, function or variable declaration are sometime inferred to `any` type.

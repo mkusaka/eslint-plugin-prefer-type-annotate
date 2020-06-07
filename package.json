@@ -12,7 +12,7 @@
   "scripts": {
     "start": "tsc --watch src",
     "build": "rm -rf dist && tsc -p .",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint",
     "prepare": "yarn build"
   },
