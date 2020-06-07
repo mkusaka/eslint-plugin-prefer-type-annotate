@@ -78,4 +78,4 @@ function e(f: number, g: number) {
 ```
 
 ## TODO
-This rule not yet covered function return type is any or not.
+Add test for each rule.
