@@ -1,4 +1,4 @@
-import { preferTypeAnnotation } from "../../../src/rules/prefer-type-annotation";
+import { preferTypeAnnotation } from "./prefer-type-annotation";
 
 import { RuleTester } from "../test-utils";
 
@@ -8,8 +8,8 @@ const ruleTester = new RuleTester({
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2015,
-    project: "tsconfig.test.json",
-    tsconfigRootDir: path.resolve(__dirname, "..", "..", ".."),
+    project: "tsconfig.json",
+    tsconfigRootDir: path.resolve(__dirname, "..", ".."),
   },
 });
 

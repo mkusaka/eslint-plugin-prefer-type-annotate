@@ -1,6 +1,6 @@
 {
   "include": [
-    "**/*.ts",
+    "**/*.ts"
   ],
   "compilerOptions": {
     "module": "commonjs",
@@ -8,15 +8,12 @@
       "esnext"
     ],
     "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
     "esModuleInterop": true,
     "outDir": "dist"
   }
