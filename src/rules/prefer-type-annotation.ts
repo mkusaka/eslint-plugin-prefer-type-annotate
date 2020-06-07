@@ -49,9 +49,35 @@ export const preferTypeAnnotation = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
-      context
-    );
+    const {
+      program,
+      esTreeNodeToTSNodeMap,
+      tsNodeToESTreeNodeMap,
+    } = ESLintUtils.getParserServices(context);
+    // api book p25
+    const sourceFile = program.getSourceFile(context.getFilename());
+    // なんかいい感じにstartとendを元にtsのnodeを取り出し、それをesのnodeにしてそちらのstartとendを取り出す感じ
+    // それの辞書型を作って、↓の探索のときにendとかで照合させる感じでやる
+    const error = {
+      start: 100,
+      end: 200,
+    };
+    function visit(node: ts.Node) {
+      const nodestart = node.pos;
+      const nodeend = node.end;
+      if (nodestart === error.start && nodeend === error.end) {
+        console.log(node);
+        const isThisIs = tsNodeToESTreeNodeMap.get(node);
+        const hoge = [1.1];
+        const [start, end] = isThisIs.range;
+      }
+      // ts.forEachChild のなかで再帰的にvisitを使う
+      ts.forEachChild(node, visit);
+    }
+    if (sourceFile) {
+      visit(sourceFile);
+    }
+    // ↓で対象一覧を取った後にvisitかけて辞書にぶっこむほうが良いかも
     const allDiagnostics = ts.getPreEmitDiagnostics(
       program,
       program.getSourceFile(context.getFilename())
