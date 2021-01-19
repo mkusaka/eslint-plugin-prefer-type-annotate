@@ -13,6 +13,7 @@
     "start": "tsc --watch src",
     "build": "rm -rf dist && tsc -p .",
     "test": "jest --passWithNoTests",
+    "tc": "tsc -p . --noEmit",
     "lint": "eslint",
     "prepublishOnly": "yarn build"
   },
