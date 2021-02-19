@@ -1,6 +1,6 @@
 # eslint-plugin-prefer-type-annotate
 
-Prefer add annotate if `any` inference eslint rule.
+Prefer add annotate for check `any` inferred point eslint rule.
 
 ## install
 
