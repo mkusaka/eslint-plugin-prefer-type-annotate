@@ -25,8 +25,8 @@ module.exports = {
     project: "tsconfig.json", // these rules require type infomation
   },
   extends: [
-    // "plugin:@mkusaka/prefer-type-annotation/all-error-rules", // include all rule as error
-    "plugin:@mkusaka/prefer-type-annotation/all-warn-rules", // include all rule as error
+    // "plugin:@mkusaka/prefer-type-annotaten/all-error-rules", // include all rule as error
+    "plugin:@mkusaka/prefer-type-annotate/all-warn-rules", // include all rule as error
   ],
   plugins: [
     "@mkusaka/prefer-type-annotate",
