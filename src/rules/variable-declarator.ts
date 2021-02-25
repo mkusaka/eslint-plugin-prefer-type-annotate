@@ -45,11 +45,16 @@ export const variableDeclarator = createRule({
           // const { foo, bar, baz } = obj;
           case "ObjectPattern":
             node.id.properties.forEach((e) => {
-              const declareType = checker.getTypeAtLocation(
-                esTreeNodeToTSNodeMap.get(e)
-              );
-              if (isTypeAnyType(declareType)) {
-                report(e, "VariableDeclaratorObject");
+              try {
+                // FIXME: sometime, getTypeAtLocation returns error. so temporally just warn and ignore it.
+                const declareType = checker.getTypeAtLocation(
+                  esTreeNodeToTSNodeMap.get(e)
+                );
+                if (isTypeAnyType(declareType)) {
+                  report(e, "VariableDeclaratorObject");
+                }
+              } catch (e) {
+                console.warn(e);
               }
             });
             break;
