@@ -8,6 +8,7 @@ import { tsAsExpression } from "./rules/ts-as-expression";
 import { tsIndexSignature } from "./rules/ts-index-signature";
 import { tsPropertySignature } from "./rules/ts-property-signature";
 import { variableDeclarator } from "./rules/variable-declarator";
+import { tsCallSignatureDeclaration } from "./rules/ts-call-signature-declaration";
 
 import { allErrorRules, allWarnRules } from "./configs/all";
 
@@ -23,6 +24,7 @@ export = {
     "ts-index-signature": tsIndexSignature,
     "ts-property-signature": tsPropertySignature,
     "variable-declarator": variableDeclarator,
+    "ts-call-signature-declaration": tsCallSignatureDeclaration,
   },
   configs: {
     "all-error-rules": allErrorRules,

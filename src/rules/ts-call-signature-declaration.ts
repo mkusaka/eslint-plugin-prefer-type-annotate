@@ -5,11 +5,11 @@ type SchemaType = {
   replaceType: string;
 };
 
-export const functionDeclaration = createRule<
+export const tsCallSignatureDeclaration = createRule<
   [SchemaType],
-  "FunctionDeclaration" | "AnyReturnType"
+  "TSCallSignatureDeclaration" | "AnyReturnType"
 >({
-  name: "function-declaration",
+  name: "ts-call-signature-declaration",
   meta: {
     type: "suggestion",
     docs: {
@@ -19,10 +19,10 @@ export const functionDeclaration = createRule<
       requiresTypeChecking: true,
     },
     messages: {
-      FunctionDeclaration:
-        "Please annotate this parameter with the correct one. This parameter is inferred as any type.",
+      TSCallSignatureDeclaration:
+        "Please annotate this parameter with the correct one. This parameter is inferred as any type",
       AnyReturnType:
-        "Please annotate this function return type with the correct one. This function return type is inferred as any type.",
+        "Please annotate this function return type with the correct one. This function return type is inferred as any type",
     },
     schema: [
       {
@@ -48,7 +48,7 @@ export const functionDeclaration = createRule<
     );
     function report(
       location: TSESTree.Node,
-      message: "FunctionDeclaration" | "AnyReturnType",
+      message: "TSCallSignatureDeclaration" | "AnyReturnType",
       fix?: ReportFixFunction
     ): void {
       context.report({
@@ -62,11 +62,15 @@ export const functionDeclaration = createRule<
     return {
       /**
        *
-       * function foo(e) {return e};
-       * //           ^~~ detect this any pattern
+       * interface {
+       *   key: any;
+       *   //   ^~~ detect this any pattern
+       *   value;
+       *   //   ^~~ also detect this any pattern
+       * }
        * @param node
        */
-      FunctionDeclaration(node): void {
+      TSCallSignatureDeclaration(node): void {
         const signatures = checker
           .getTypeAtLocation(esTreeNodeToTSNodeMap.get(node))
           .getCallSignatures();
@@ -86,7 +90,7 @@ export const functionDeclaration = createRule<
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
           const { replaceType } = options;
-          report(anyParamNode, "FunctionDeclaration", (fixer) => {
+          report(anyParamNode, "TSCallSignatureDeclaration", (fixer) => {
             if ("name" in anyParamNode && !anyParamNode.typeAnnotation) {
               return fixer.replaceText(
                 anyParamNode,

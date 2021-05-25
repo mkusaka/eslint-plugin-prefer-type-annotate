@@ -73,7 +73,13 @@ export const arrowFunctionExpression = createRule<
         if (signatures.length) {
           const returnType = checker.getReturnTypeOfSignature(signatures[0]);
           if (isTypeAnyType(returnType)) {
-            report(node, "AnyReturnType");
+            report(node, "AnyReturnType", (fixer) => {
+              if (!node.returnType) {
+                const { replaceType } = options;
+                return fixer.insertTextAfter(node, `: ${replaceType}`);
+              }
+              return null;
+            });
           }
         }
         for (const anyParamNode of node.params.filter((e) =>

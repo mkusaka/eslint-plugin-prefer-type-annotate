@@ -11,6 +11,7 @@ export function ruleLeveler(level: "error" | "warn" | "off") {
       "@mkusaka/prefer-type-annotate/ts-index-signature": level,
       "@mkusaka/prefer-type-annotate/ts-property-signature": level,
       "@mkusaka/prefer-type-annotate/variable-declarator": level,
+      "@mkusaka/prefer-type-annotate/ts-call-signature-declaration": level,
     },
   };
 }
