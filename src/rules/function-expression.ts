@@ -69,8 +69,13 @@ export const functionExpression = createRule<
           if (isTypeAnyType(returnType)) {
             report(node, "AnyReturnType", (fixer) => {
               if (!node.returnType) {
+                const lastParamRange =
+                  node.params[node.params.length - 1].range;
                 const { replaceType } = options;
-                return fixer.insertTextAfter(node, `: ${replaceType}`);
+                return fixer.insertTextAfterRange(
+                  [lastParamRange[0], lastParamRange[1] + 1],
+                  `: ${replaceType}`
+                );
               }
               return null;
             });
