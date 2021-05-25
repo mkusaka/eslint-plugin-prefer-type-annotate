@@ -1,6 +1,14 @@
+import { ReportFixFunction } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import { ESLintUtils, TSESTree, createRule, isTypeAnyType } from "../utils";
 
-export const tsPropertySignature = createRule({
+type SchemaType = {
+  replaceType: string;
+};
+
+export const tsPropertySignature = createRule<
+  [SchemaType],
+  "TSPropertySignature"
+>({
   name: "ts-property-signature",
   meta: {
     type: "suggestion",
@@ -14,20 +22,36 @@ export const tsPropertySignature = createRule({
       TSPropertySignature:
         "Please annotate this property signature with the correct one. This property signature is inferred as any type.",
     },
-    schema: [],
+    schema: [
+      {
+        type: "object",
+        properties: {
+          replaceType: {
+            type: "string",
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
-  defaultOptions: [],
+  defaultOptions: [
+    {
+      replaceType: "any",
+    },
+  ],
   create(context) {
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
     function report(
       location: TSESTree.Node,
-      message: "TSPropertySignature"
+      message: "TSPropertySignature",
+      fix?: ReportFixFunction
     ): void {
       context.report({
         node: location,
         messageId: message,
+        fix,
       });
     }
     const checker = program.getTypeChecker();
@@ -47,7 +71,18 @@ export const tsPropertySignature = createRule({
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const declareType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(declareType)) {
-          report(node, "TSPropertySignature");
+          const { replaceType } = context.options[0];
+          // report(declareType, "FunctionDeclaration", (fixer) => {
+          report(node, "TSPropertySignature", (fixer) => {
+            const key = node.key;
+            if ("name" in key && !node.typeAnnotation) {
+              return fixer.replaceText(
+                node,
+                // FIXME: may name to be not string
+                `${key.name as string}: ${replaceType}`
+              );
+            }
+          });
         }
       },
     };

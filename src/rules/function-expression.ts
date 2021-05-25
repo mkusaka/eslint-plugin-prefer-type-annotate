@@ -1,7 +1,14 @@
 import { ReportFixFunction } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import { ESLintUtils, TSESTree, createRule, isTypeAnyType } from "../utils";
 
-export const functionExpression = createRule({
+type SchemaType = {
+  replaceType: string;
+};
+
+export const functionExpression = createRule<
+  [SchemaType],
+  "FunctionExpression" | "AnyReturnType"
+>({
   name: "function-expression",
   meta: {
     type: "suggestion",
@@ -17,10 +24,24 @@ export const functionExpression = createRule({
       AnyReturnType:
         "Please annotate this function return type with the correct one. This function return type is inferred as any type.",
     },
-    schema: [],
+    schema: [
+      {
+        type: "object",
+        properties: {
+          replaceType: {
+            type: "string",
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
     fixable: "code",
   },
-  defaultOptions: [],
+  defaultOptions: [
+    {
+      replaceType: "any",
+    },
+  ],
   create(context) {
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
@@ -52,11 +73,12 @@ export const functionExpression = createRule({
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
+          const { replaceType } = context.options[0];
           report(anyParamNode, "FunctionExpression", (fixer) => {
             if ("name" in anyParamNode && !anyParamNode.typeAnnotation) {
               return fixer.replaceText(
                 anyParamNode,
-                `${anyParamNode.name}: any`
+                `${anyParamNode.name}: ${replaceType}`
               );
             }
             return null;
