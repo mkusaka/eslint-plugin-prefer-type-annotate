@@ -33,6 +33,7 @@ export const tsPropertySignature = createRule<
         additionalProperties: false,
       },
     ],
+    fixable: "code",
   },
   defaultOptions: [
     {
