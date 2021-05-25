@@ -80,7 +80,7 @@ export const tsPropertySignature = createRule<
               return fixer.replaceText(
                 node,
                 // FIXME: may name to be not string
-                `${key.name as string}: ${replaceType}`
+                `${key.name as string}: ${replaceType};`
               );
             }
             return null;
