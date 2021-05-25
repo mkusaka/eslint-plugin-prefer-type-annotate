@@ -82,6 +82,7 @@ export const tsPropertySignature = createRule<
                 `${key.name as string}: ${replaceType}`
               );
             }
+            return null;
           });
         }
       },
