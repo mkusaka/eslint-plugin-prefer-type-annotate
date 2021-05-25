@@ -42,7 +42,7 @@ export const functionDeclaration = createRule<
       replaceType: "any",
     },
   ],
-  create(context) {
+  create(context, [options]) {
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
@@ -79,7 +79,7 @@ export const functionDeclaration = createRule<
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
-          const { replaceType } = context.options[0];
+          const { replaceType } = options;
           report(anyParamNode, "FunctionDeclaration", (fixer) => {
             if ("name" in anyParamNode && !anyParamNode.typeAnnotation) {
               return fixer.replaceText(

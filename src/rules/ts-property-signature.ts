@@ -39,7 +39,7 @@ export const tsPropertySignature = createRule<
       replaceType: "any",
     },
   ],
-  create(context) {
+  create(context, [options]) {
     const { program, esTreeNodeToTSNodeMap } = ESLintUtils.getParserServices(
       context
     );
@@ -71,7 +71,7 @@ export const tsPropertySignature = createRule<
         const esnode = esTreeNodeToTSNodeMap.get(node);
         const declareType = checker.getTypeAtLocation(esnode);
         if (isTypeAnyType(declareType)) {
-          const { replaceType } = context.options[0];
+          const { replaceType } = options;
           // report(declareType, "FunctionDeclaration", (fixer) => {
           report(node, "TSPropertySignature", (fixer) => {
             const key = node.key;
