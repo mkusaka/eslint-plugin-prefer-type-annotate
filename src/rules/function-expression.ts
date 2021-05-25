@@ -1,3 +1,4 @@
+import { ReportFixFunction } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import { ESLintUtils, TSESTree, createRule, isTypeAnyType } from "../utils";
 
 export const functionExpression = createRule({
@@ -17,6 +18,7 @@ export const functionExpression = createRule({
         "Please annotate this function return type with the correct one. This function return type is inferred as any type.",
     },
     schema: [],
+    fixable: "code",
   },
   defaultOptions: [],
   create(context) {
@@ -25,11 +27,13 @@ export const functionExpression = createRule({
     );
     function report(
       location: TSESTree.Node,
-      message: "FunctionExpression" | "AnyReturnType"
+      message: "FunctionExpression" | "AnyReturnType",
+      fix?: ReportFixFunction
     ): void {
       context.report({
         node: location,
         messageId: message,
+        fix,
       });
     }
     const checker = program.getTypeChecker();
@@ -48,7 +52,9 @@ export const functionExpression = createRule({
         for (const anyParamNode of node.params.filter((e) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
-          report(anyParamNode, "FunctionExpression");
+          report(anyParamNode, "FunctionExpression", (fixer) => {
+            return fixer.replaceText(anyParamNode, "some: any");
+          });
         }
       },
     };
