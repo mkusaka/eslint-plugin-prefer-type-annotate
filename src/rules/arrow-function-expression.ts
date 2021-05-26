@@ -75,6 +75,7 @@ export const arrowFunctionExpression = createRule<
           if (isTypeAnyType(returnType)) {
             report(node, "AnyReturnType", (fixer) => {
               if (!node.returnType) {
+                // TODO: handle no-parameter pattern
                 const lastParamRange =
                   node.params[node.params.length - 1].range;
                 const { replaceType } = options;
