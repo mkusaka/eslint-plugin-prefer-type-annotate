@@ -76,13 +76,15 @@ export const arrowFunctionExpression = createRule<
             report(node, "AnyReturnType", (fixer) => {
               if (!node.returnType) {
                 // TODO: handle no-parameter pattern
-                const lastParamRange =
-                  node.params[node.params.length - 1].range;
-                const { replaceType } = options;
-                return fixer.insertTextAfterRange(
-                  [lastParamRange[0], lastParamRange[1] + 1],
-                  `: ${replaceType}`
-                );
+                if (node.params.length > 0) {
+                  const lastParamRange =
+                    node.params[node.params.length - 1].range;
+                  const { replaceType } = options;
+                  return fixer.insertTextAfterRange(
+                    [lastParamRange[0], lastParamRange[1] + 1],
+                    `: ${replaceType}`
+                  );
+                }
               }
               return null;
             });
