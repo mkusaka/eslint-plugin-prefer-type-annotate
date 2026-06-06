@@ -86,7 +86,7 @@ export const tsCallSignatureDeclaration = createRule<
             });
           }
         }
-        for (const anyParamNode of node.params.filter((e) =>
+        for (const anyParamNode of node.params.filter((e: TSESTree.Parameter) =>
           isTypeAnyType(checker.getTypeAtLocation(esTreeNodeToTSNodeMap.get(e)))
         )) {
           const { replaceType } = options;

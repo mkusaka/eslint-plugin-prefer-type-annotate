@@ -44,7 +44,7 @@ export const variableDeclarator = createRule({
         switch (node.id.type) {
           // const { foo, bar, baz } = obj;
           case "ObjectPattern":
-            node.id.properties.forEach((e) => {
+            node.id.properties.forEach((e: TSESTree.Property | TSESTree.RestElement) => {
               try {
                 // FIXME: sometime, getTypeAtLocation returns error. so temporally just warn and ignore it.
                 const declareType = checker.getTypeAtLocation(
@@ -60,7 +60,7 @@ export const variableDeclarator = createRule({
             break;
           // const [ foo, bar, baz ] = arr;
           case "ArrayPattern":
-            node.id.elements.filter(Boolean).forEach((e) => {
+            node.id.elements.filter(Boolean).forEach((e: TSESTree.DestructuringPattern | null) => {
               const declareType = checker.getTypeAtLocation(
                 esTreeNodeToTSNodeMap.get(e!)
               );

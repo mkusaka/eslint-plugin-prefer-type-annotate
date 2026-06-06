@@ -5,7 +5,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "lib": [
-      "esnext"
+      "esnext",
+      "dom"
     ],
     "target": "ES2019",
     "importHelpers": true,
