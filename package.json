@@ -66,5 +66,6 @@
   },
   "dependencies": {
     "@typescript-eslint/experimental-utils": "^4.14.0"
-  }
+  },
+  "packageManager": "pnpm@11.5.2"
 }
